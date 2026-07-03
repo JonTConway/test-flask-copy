@@ -5,7 +5,9 @@ pipeline{
   }
   stages{
     stage('Checkout'){
-      git branch: 'main', url: 'https://github.com/JonTConway/test-flask-copy'
+      steps{
+       git branch: 'main', url: 'https://github.com/JonTConway/test-flask-copy' 
+      }
     }
     stage('Build Docker image'){
       steps{
