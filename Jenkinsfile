@@ -20,9 +20,13 @@ pipeline{
                                           usernameVariable: 'DOCKER_USER', 
                                           passwordVariable: 'DOCKER_PASS')]){
           // Using powershell avoids the "echo password |" syntax bug on Windows
-            powershell 'echo $env:DOCKER_PASS | docker login -u $env:DOCKER_USER --password-stdin'
+            powershell """
+                \$secpasswd = ConvertTo-SecureString "$DOCKER_PASS" -AsPlainText -Force
+                \$mycreds = New-Object System.Management.Automation.PSCredential ("$DOCKER_USER", \$secpasswd)
+                Docker login --credential-current-user
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+            """
             
-            // Tag and push your image
             bat 'docker push JonTConway/test-flask-copy:latest'
         }
       }
