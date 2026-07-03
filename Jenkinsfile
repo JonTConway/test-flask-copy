@@ -1,24 +1,26 @@
 pipeline{
   agent any
   environment{
-    VENV = 'venv'
+      IMAGE_NAME =   'JonTConway/test-flask-copy'
   }
   stages{
-    stage('Checkout git'){
+    stage('Checkout'){
+      git branch: 'main', url: 'https://github.com/JonTConway/test-flask-copy'
+    }
+    stage('Build Docker image'){
       steps{
-        git branch: 'main', url: 'https://github.com/JonTConway/test-flask'
+        bat "docker build -t %IMAGE_NAME%:latest ."
       }
     }
-    stage('set up the venv'){
+    stage('Push to DockerHub'){
       steps{
-        bat 'python -m venv %VENV%'
-        bat '%VENV%\\Scripts\\python -m pip install --upgrade pip'
-        bat '%VENV%\\Scripts\\pip install -r requirements.txt'
-      }
-    }
-    stage('RUN THE TESTS'){
-      steps{
-        bat '%VENV%\\Scripts\\python -m unittest discover -s tests'
+        withCredentials([usernamePassword(credentialsId: 'docker', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS)])
+          bat """
+          echo %DOCKER_PASS% | 
+          docker login -u %DOCKER_USER% --password-stdin 
+          docker push %IMAGE_NAME%:latest
+          docker logout
+          """
       }
     }
   }
