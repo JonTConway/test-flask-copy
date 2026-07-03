@@ -23,7 +23,7 @@ pipeline{
             bat 'docker login -u %DOCKER_USER% --password %DOCKER_PASS%'
             
             // Push your image
-            bat 'docker push JonTConway/test-flask-copy:latest'
+            bat 'docker push jontconway/test-flask-copy:latest'
         }
       }
     }
