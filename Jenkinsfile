@@ -1,7 +1,7 @@
 pipeline{
   agent any
   environment{
-      IMAGE_NAME = 'jontconway/test-flask-copy'
+      IMAGE_NAME = 'jconway87/test-flask-copy'
   }
   stages{
     stage('Checkout'){
@@ -21,7 +21,6 @@ pipeline{
                                           passwordVariable: 'DOCKER_PASS')]){
           // This safely logs in on Windows without using the pipe (|) character
             bat 'docker login -u %DOCKER_USER% --password %DOCKER_PASS%'
-            
             // Push your image
             bat 'docker push %IMAGE_NAME%:latest'
         }
