@@ -1,7 +1,7 @@
 pipeline{
   agent any
   environment{
-      IMAGE_NAME =   'JonTConway/test-flask-copy'
+      IMAGE_NAME = 'JonTConway/test-flask-copy'
   }
   stages{
     stage('Checkout'){
