@@ -1,7 +1,7 @@
 pipeline{
   agent any
   environment{
-      IMAGE_NAME = 'JonTConway/test-flask-copy'
+      IMAGE_NAME = 'jontconway/test-flask-copy'
   }
   stages{
     stage('Checkout'){
@@ -23,7 +23,7 @@ pipeline{
             bat 'docker login -u %DOCKER_USER% --password %DOCKER_PASS%'
             
             // Push your image
-            bat 'docker push jontconway/test-flask-copy:latest'
+            bat 'docker push %IMAGE_NAME%:latest'
         }
       }
     }
